@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export HF_TOKEN=$HUGGING_FACE_TOKEN
+
 # Descargar modelo cuantizado
 python3 -c "
 from huggingface_hub import snapshot_download
