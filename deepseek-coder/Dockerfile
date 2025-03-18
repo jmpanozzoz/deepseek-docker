@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip3 install --upgrade pip && \
     pip3 install torch==2.3.0+cu121 --extra-index-url https://download.pytorch.org/whl/cu121
 
+# Instalación de NumPy 1.x para evitar problemas de compatibilidad
+RUN pip3 install "numpy<2"
+
 RUN pip3 install \
     vllm==0.4.1 \
     huggingface_hub==0.22.2 \

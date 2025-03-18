@@ -1,45 +1,32 @@
 #!/bin/bash
 
 export HF_TOKEN=$HUGGING_FACE_TOKEN
-QUANTIZATION=${QUANTIZATION:-None}  # Usar None si no está definido
 
-echo "🔹 Usando QUANTIZATION: $QUANTIZATION"
 echo "🔹 Descargando modelo: $MODEL_NAME"
 
-# Verificar si `QUANTIZATION` es válido
-VALID_QUANTIZATIONS=("aqlm" "awq" "fp8" "gptq" "squeezellm" "marlin" "None")
-if [[ ! " ${VALID_QUANTIZATIONS[@]} " =~ " ${QUANTIZATION} " ]]; then
-    echo "⚠️ Error: Valor inválido para QUANTIZATION (${QUANTIZATION})"
-    echo "   Opciones válidas: ${VALID_QUANTIZATIONS[*]}"
-    exit 1
-fi
-
-# Descargar modelo sin aplicar cuantización si es "None"
-if [[ "$QUANTIZATION" == "None" ]]; then
-    QUANTIZATION_ARG=""
-else
-    QUANTIZATION_ARG="revision='${QUANTIZATION}',"
-fi
-
+# Descargar modelo desde Hugging Face
 python3 -c "
 from huggingface_hub import snapshot_download
-snapshot_download(
-    '${MODEL_NAME}',
-    ${QUANTIZATION_ARG}
-    cache_dir='/root/.cache/huggingface/hub',
-    ignore_patterns=['*.safetensors', '*.bin']
-)
+try:
+    snapshot_download(
+        '${MODEL_NAME}',
+        cache_dir='/root/.cache/huggingface/hub',
+        ignore_patterns=['*.safetensors', '*.bin']
+    )
+    print('✅ Modelo descargado con éxito.')
+except Exception as e:
+    print(f'❌ Error al descargar el modelo: {e}')
+    exit(1)
 "
 
-# Detectar Compute Capability (aún no se usa, pero puede ser útil)
+# Detectar Compute Capability (opcional, útil para logs o depuración)
 COMPUTE_CAP=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader | head -1 | tr -d '.')
 
 echo "🚀 Iniciando vLLM"
 
-# Iniciar servidor
+# Iniciar servidor vLLM
 exec python3 -m vllm.entrypoints.api_server \
     --model "${MODEL_NAME}" \
-    --quantization "${QUANTIZATION}" \
     --tensor-parallel-size 2 \
     --gpu-memory-utilization 0.97 \
     --max-model-len 8192 \

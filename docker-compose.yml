@@ -3,7 +3,6 @@ services:
     build: ./deepseek-r1
     environment:
       - MODEL_NAME=deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
-      - QUANTIZATION=gptq
       - API_KEY=${R1_API_KEY}
       - HUGGING_FACE_TOKEN=${HUGGING_FACE_TOKEN}
     deploy:
@@ -22,7 +21,6 @@ services:
     build: ./deepseek-coder
     environment:
       - MODEL_NAME=deepseek-ai/DeepSeek-Coder-V2-Instruct
-      - QUANTIZATION=awq
       - API_KEY=${CODER_API_KEY}
       - HUGGING_FACE_TOKEN=${HUGGING_FACE_TOKEN}
     deploy:
