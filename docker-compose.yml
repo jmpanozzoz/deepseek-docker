@@ -12,6 +12,7 @@ services:
             - driver: nvidia
               count: 2
               capabilities: [gpu]
+    shm_size: '10gb'
     ports:
       - "8000:8000"
     volumes:
@@ -30,6 +31,7 @@ services:
             - driver: nvidia
               count: 2
               capabilities: [gpu]
+    shm_size: '10gb'
     ports:
       - "8001:8000"
     volumes:
