@@ -22,13 +22,13 @@ except Exception as e:
 # Detectar Compute Capability (opcional, útil para logs o depuración)
 COMPUTE_CAP=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader | head -1 | tr -d '.')
 
-echo "🚀 Iniciando vLLM"
+echo "🚀 Iniciando vLLM con configuración optimizada"
 
-# Iniciar servidor vLLM
+# Iniciar servidor vLLM con número de workers limitados
 exec python3 -m vllm.entrypoints.api_server \
     --model "${MODEL_NAME}" \
     --tensor-parallel-size 2 \
     --gpu-memory-utilization 0.97 \
     --max-model-len 8192 \
     --max-num-batched-tokens 8192 \
-    --max-parallel-loading-workers 4
+    --max-parallel-loading-workers ${MAX_CONCURRENT_WORKERS}
