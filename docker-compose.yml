@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   ollama-deepseek-r1:
     image: ollama/ollama
@@ -9,8 +7,8 @@ services:
     ports:
       - "11434:11434"
     restart: always
-    command: >
-      sh -c "ollama pull deepseek-ai/DeepSeek-R1-Distill-Qwen-32B && ollama serve"
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["ollama pull deepseek-ai/DeepSeek-R1-Distill-Qwen-32B && ollama serve"]
 
   ollama-deepseek-coder:
     image: ollama/ollama
@@ -20,8 +18,8 @@ services:
     ports:
       - "11435:11434"  # Cambia el puerto para evitar conflicto
     restart: always
-    command: >
-      sh -c "ollama pull deepseek-ai/DeepSeek-Coder-V2-Instruct && ollama serve"
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["ollama pull deepseek-ai/DeepSeek-Coder-V2-Instruct && ollama serve"]
 
 volumes:
   ollama_data:
