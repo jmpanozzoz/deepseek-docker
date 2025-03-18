@@ -7,6 +7,7 @@ services:
       - MODEL_NAME=deepseek-ai/deepseek-r1-33b-chat
       - QUANTIZATION=awq
       - API_KEY=${R1_API_KEY}
+      - HUGGING_FACE_TOKEN=${HUGGING_FACE_TOKEN}
     deploy:
       resources:
         reservations:
@@ -25,6 +26,7 @@ services:
       - MODEL_NAME=deepseek-ai/deepseek-coder-33b-instruct
       - QUANTIZATION=awq
       - API_KEY=${CODER_API_KEY}
+      - HUGGING_FACE_TOKEN=${HUGGING_FACE_TOKEN}
     deploy:
       resources:
         reservations:
