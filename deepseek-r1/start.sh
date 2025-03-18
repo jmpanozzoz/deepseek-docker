@@ -31,17 +31,10 @@ snapshot_download(
 )
 "
 
-# Detectar Compute Capability
+# Detectar Compute Capability (aún no se usa, pero puede ser útil)
 COMPUTE_CAP=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader | head -1 | tr -d '.')
-EXTRA_ARGS=()
 
-if [[ ${COMPUTE_CAP} -ge 90 ]]; then
-    EXTRA_ARGS+=("--block-size 32")
-elif [[ ${COMPUTE_CAP} -ge 80 ]]; then
-    EXTRA_ARGS+=("--block-size 16")
-fi
-
-echo "🚀 Iniciando vLLM con argumentos: ${EXTRA_ARGS[*]}"
+echo "🚀 Iniciando vLLM"
 
 # Iniciar servidor
 exec python3 -m vllm.entrypoints.api_server \
@@ -51,5 +44,4 @@ exec python3 -m vllm.entrypoints.api_server \
     --gpu-memory-utilization 0.97 \
     --max-model-len 8192 \
     --max-num-batched-tokens 7168 \
-    --max-parallel-loading-workers 4 \
-    "${EXTRA_ARGS[@]}"
+    --max-parallel-loading-workers 4
