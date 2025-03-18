@@ -1,17 +1,20 @@
 #!/bin/bash
 
 export HF_TOKEN=$HUGGING_FACE_TOKEN
-QUANTIZATION=${QUANTIZATION:-"main"}  # Usa "main" si no está definido
+QUANTIZATION=${QUANTIZATION:-None}  # Usar None si no está definido
 
 echo "Usando QUANTIZATION: $QUANTIZATION"
 echo "Descargando modelo: $MODEL_NAME"
 
-# Verificar si nvidia-smi está disponible
-if ! command -v nvidia-smi &> /dev/null; then
-    echo "⚠️ Advertencia: nvidia-smi no está disponible dentro del contenedor"
+# Verificar si `QUANTIZATION` es válido
+VALID_QUANTIZATIONS=("aqlm" "awq" "fp8" "gptq" "squeezellm" "marlin" "None")
+if [[ ! " ${VALID_QUANTIZATIONS[@]} " =~ " ${QUANTIZATION} " ]]; then
+    echo "⚠️ Error: Valor inválido para QUANTIZATION (${QUANTIZATION})"
+    echo "Opciones válidas: ${VALID_QUANTIZATIONS[*]}"
+    exit 1
 fi
 
-# Descargar modelo cuantizado
+# Descargar modelo con la cuantización seleccionada
 python3 -c "
 from huggingface_hub import snapshot_download
 snapshot_download(
