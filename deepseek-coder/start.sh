@@ -30,5 +30,5 @@ exec python3 -m vllm.entrypoints.api_server \
     --tensor-parallel-size 2 \
     --gpu-memory-utilization 0.97 \
     --max-model-len 8192 \
-    --max-num-batched-tokens 7168 \
+    --max-num-batched-tokens 8192 \
     --max-parallel-loading-workers 4
