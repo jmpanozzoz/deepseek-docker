@@ -26,6 +26,7 @@ deepseek-docker/
 └── deepseek-coder/
     ├── Dockerfile
     └── start.sh
+```
 
 ## Initial Configuration
 
