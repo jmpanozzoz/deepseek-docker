@@ -1,24 +1,27 @@
+version: '3.8'
+
 services:
   ollama-deepseek-r1:
     image: ollama/ollama
     container_name: ollama-deepseek-r1
-    ports:
-      - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
     restart: always
-    command: ["ollama", "run", "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"]
+    command: >
+      sh -c "ollama pull deepseek-ai/DeepSeek-R1-Distill-Qwen-32B && ollama serve"
 
   ollama-deepseek-coder:
     image: ollama/ollama
     container_name: ollama-deepseek-coder
-    ports:
-      - "11435:11434"  # Cambiamos el puerto para evitar conflictos
     volumes:
       - ollama_data:/root/.ollama
+    ports:
+      - "11435:11434"  # Cambia el puerto para evitar conflicto
     restart: always
-    command: ["ollama", "run", "deepseek-ai/DeepSeek-Coder-V2-Instruct"]
+    command: >
+      sh -c "ollama pull deepseek-ai/DeepSeek-Coder-V2-Instruct && ollama serve"
 
 volumes:
   ollama_data:
-    driver: local
